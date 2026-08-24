@@ -3,254 +3,115 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Dashboard</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+  <title>Project Viewer</title>
 
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f5f5f5;
-      color: #222;
-    }
-
-    header {
-      background: #111;
-      color: white;
-      padding: 20px;
-    }
-
-    header h1 {
-      margin: 0;
-    }
-
-    .container {
-      max-width: 1000px;
-      margin: 30px auto;
-      padding: 0 20px;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-    }
-
-    .card {
-      background: white;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    }
-
-    input, textarea, button {
-      font: inherit;
-    }
-
-    input, textarea {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      margin-bottom: 10px;
-    }
-
-    textarea {
-      min-height: 200px;
-      resize: vertical;
-    }
-
-    button {
-      border: none;
-      border-radius: 8px;
-      padding: 10px 15px;
-      cursor: pointer;
-      background: #111;
-      color: white;
-    }
-
-    button:hover {
-      opacity: 0.8;
-    }
-
-    .task {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 0;
-      border-bottom: 1px solid #eee;
-    }
-
-    .task span {
-      flex: 1;
-    }
-
-    .completed {
-      text-decoration: line-through;
-      color: #888;
-    }
-
-    .delete {
-      background: #ddd;
-      color: #222;
-      padding: 5px 9px;
-    }
-
-    @media (max-width: 700px) {
-      .grid {
-        grid-template-columns: 1fr;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<header>
-  <h1>My Dashboard</h1>
-</header>
+  <header>
+    <h1>Project Viewer</h1>
+    <p id="currentDate"></p>
+  </header>
 
-<div class="container">
+  <main class="container">
 
-  <div class="grid">
+    <div class="dashboard">
 
-    <!-- TASKS -->
-    <div class="card">
-      <h2>Tasks</h2>
+      <!-- TASKS -->
 
-      <input
-        id="taskInput"
-        type="text"
-        placeholder="Add a task..."
-      >
+      <section class="card">
 
-      <button onclick="addTask()">Add Task</button>
+        <h2>Tasks</h2>
 
-      <div id="taskList"></div>
-    </div>
+        <div class="task-form">
 
-    <!-- NOTES -->
-    <div class="card">
-      <h2>Notes</h2>
+          <input
+            id="taskInput"
+            type="text"
+            placeholder="What needs to be done?"
+          >
 
-      <textarea
-        id="notes"
-        placeholder="Write your notes here..."
-      ></textarea>
+          <input
+            id="taskDate"
+            type="date"
+          >
 
-      <button onclick="saveNotes()">Save Notes</button>
-    </div>
+          <select id="taskPriority">
+            <option value="low">Low</option>
+            <option value="medium" selected>Medium</option>
+            <option value="high">High</option>
+          </select>
 
-  </div>
-
-</div>
-
-<script>
-
-  // -------------------------
-  // TASKS
-  // -------------------------
-
-  let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
-
-  function saveTasks() {
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-  }
-
-  function renderTasks() {
-
-    const taskList = document.getElementById("taskList");
-
-    taskList.innerHTML = "";
-
-    tasks.forEach((task, index) => {
-
-      const div = document.createElement("div");
-      div.className = "task";
-
-      div.innerHTML = `
-        <input
-          type="checkbox"
-          ${task.completed ? "checked" : ""}
-          onchange="toggleTask(${index})"
-        >
-
-        <span class="${task.completed ? "completed" : ""}">
-          ${task.text}
-        </span>
+        </div>
 
         <button
-          class="delete"
-          onclick="deleteTask(${index})"
+          class="primary-button"
+          onclick="addTask()"
         >
-          Delete
+          Add Task
         </button>
-      `;
 
-      taskList.appendChild(div);
-    });
-  }
+        <div class="filters">
 
-  function addTask() {
+          <button
+            class="filter-button active"
+            onclick="setFilter('today')"
+            id="todayFilter"
+          >
+            Today
+          </button>
 
-    const input = document.getElementById("taskInput");
+          <button
+            class="filter-button"
+            onclick="setFilter('upcoming')"
+            id="upcomingFilter"
+          >
+            Upcoming
+          </button>
 
-    const text = input.value.trim();
+          <button
+            class="filter-button"
+            onclick="setFilter('all')"
+            id="allFilter"
+          >
+            All
+          </button>
 
-    if (!text) return;
+        </div>
 
-    tasks.push({
-      text: text,
-      completed: false
-    });
+        <div id="taskList"></div>
 
-    input.value = "";
-
-    saveTasks();
-    renderTasks();
-  }
-
-  function toggleTask(index) {
-
-    tasks[index].completed = !tasks[index].completed;
-
-    saveTasks();
-    renderTasks();
-  }
-
-  function deleteTask(index) {
-
-    tasks.splice(index, 1);
-
-    saveTasks();
-    renderTasks();
-  }
+      </section>
 
 
-  // -------------------------
-  // NOTES
-  // -------------------------
+      <!-- NOTES -->
 
-  const notes = document.getElementById("notes");
+      <section class="card">
 
-  notes.value = localStorage.getItem("notes") || "";
+        <h2>Notes</h2>
 
-  function saveNotes() {
+        <textarea
+          id="notes"
+          placeholder="Write anything here..."
+        ></textarea>
 
-    localStorage.setItem("notes", notes.value);
+        <div
+          class="save-message"
+          id="saveMessage"
+        >
+          Auto-saving...
+        </div>
 
-    alert("Notes saved!");
-  }
+      </section>
 
+    </div>
 
-  // Initial load
+  </main>
 
-  renderTasks();
-
-</script>
+  <script src="app.js"></script>
 
 </body>
 </html>
