@@ -1,17 +1,66 @@
 /* =========================
-   GLOBAL
+   DESIGN SYSTEM
+========================= */
+
+:root {
+  --bg: #f7f8fa;
+  --surface: #ffffff;
+  --surface-hover: #f9fafb;
+
+  --text: #111827;
+  --text-secondary: #6b7280;
+  --text-muted: #9ca3af;
+
+  --border: #e5e7eb;
+
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+
+  --danger: #dc2626;
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+
+  --shadow-sm:
+    0 1px 2px rgba(0, 0, 0, 0.04);
+
+  --shadow-md:
+    0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+
+/* =========================
+   RESET
 ========================= */
 
 * {
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
-  background: #f4f5f7;
-  color: #1f2937;
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  background: var(--bg);
+  color: var(--text);
+
+  line-height: 1.5;
 }
+
+
+/* =========================
+   ELEMENTS
+========================= */
 
 button,
 input,
@@ -24,88 +73,183 @@ button {
   cursor: pointer;
 }
 
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
 
 /* =========================
    HEADER
 ========================= */
 
 header {
-  background: #111827;
-  color: white;
-  padding: 24px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 28px 0;
 }
 
 header h1 {
   margin: 0;
-  font-size: 28px;
+
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
 }
 
 header p {
-  margin: 6px 0 0;
-  color: #9ca3af;
+  margin: 4px 0 0;
+
+  color: var(--text-secondary);
+  font-size: 14px;
 }
 
 
 /* =========================
-   MAIN LAYOUT
+   CONTAINER
 ========================= */
 
 .container {
-  max-width: 1200px;
-  margin: 30px auto;
-  padding: 0 20px;
-}
-
-.dashboard {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 20px;
-}
-
-.card {
-  background: white;
-  padding: 22px;
-  border-radius: 14px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
-}
-
-.card h2 {
-  margin-top: 0;
+  width: min(1200px, calc(100% - 40px));
+  margin: 32px auto;
 }
 
 
 /* =========================
-   TASK INPUT
+   DASHBOARD
+========================= */
+
+.dashboard {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1.7fr)
+    minmax(320px, 1fr);
+
+  gap: 24px;
+
+  align-items: start;
+}
+
+
+/* =========================
+   CARDS
+========================= */
+
+.card {
+  background: var(--surface);
+
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+
+  padding: 24px;
+
+  box-shadow: var(--shadow-sm);
+}
+
+.card h2 {
+  margin: 0 0 20px;
+
+  font-size: 17px;
+  font-weight: 650;
+
+  letter-spacing: -0.2px;
+}
+
+
+/* =========================
+   TASK FORM
 ========================= */
 
 .task-form {
   display: grid;
-  grid-template-columns: 1fr auto auto;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    150px
+    120px;
+
   gap: 8px;
-  margin-bottom: 20px;
+
+  margin-bottom: 10px;
 }
+
+
+/* =========================
+   INPUTS
+========================= */
 
 input,
 select,
 textarea {
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  padding: 10px;
-  background: white;
+  width: 100%;
+
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+
+  background: var(--surface);
+
+  color: var(--text);
+
+  padding: 10px 12px;
+
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--text-muted);
+}
+
+input:hover,
+select:hover,
+textarea:hover {
+  border-color: #d1d5db;
 }
 
 input:focus,
 select:focus,
 textarea:focus {
-  outline: 2px solid #9ca3af;
+  border-color: var(--accent);
+
+  box-shadow:
+    0 0 0 3px rgba(37, 99, 235, 0.1);
+
+  outline: none;
 }
 
+
+/* =========================
+   PRIMARY BUTTON
+========================= */
+
 .primary-button {
-  background: #111827;
-  color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
+
+  background: var(--accent);
+  color: white;
+
   padding: 10px 16px;
+
+  font-weight: 600;
+
+  transition:
+    background 0.15s,
+    transform 0.1s;
+}
+
+.primary-button:hover {
+  background: var(--accent-hover);
+}
+
+.primary-button:active {
+  transform: translateY(1px);
 }
 
 
@@ -115,69 +259,127 @@ textarea:focus {
 
 .filters {
   display: flex;
-  gap: 8px;
-  margin: 20px 0 15px;
+  gap: 4px;
+
+  margin: 24px 0 8px;
+
+  border-bottom: 1px solid var(--border);
 }
 
 .filter-button {
-  background: #e5e7eb;
-  color: #374151;
+  position: relative;
+
+  background: transparent;
+  color: var(--text-secondary);
+
   border: none;
-  padding: 7px 12px;
-  border-radius: 7px;
+
+  padding: 9px 12px;
+
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.filter-button:hover {
+  color: var(--text);
 }
 
 .filter-button.active {
-  background: #111827;
-  color: white;
+  color: var(--text);
+}
+
+.filter-button.active::after {
+  content: "";
+
+  position: absolute;
+
+  left: 12px;
+  right: 12px;
+  bottom: -1px;
+
+  height: 2px;
+
+  background: var(--accent);
+
+  border-radius: 2px;
 }
 
 
 /* =========================
-   TASKS
+   TASK
 ========================= */
 
 .task {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 13px 0;
-  border-bottom: 1px solid #eee;
+  gap: 12px;
+
+  min-height: 64px;
+
+  padding: 12px 4px;
+
+  border-bottom: 1px solid #f0f1f3;
 }
 
 .task:last-child {
   border-bottom: none;
 }
 
+.task:hover {
+  background: var(--surface-hover);
+}
+
+
+/* =========================
+   TASK CHECKBOX
+========================= */
+
+.task > input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+
+  flex-shrink: 0;
+
+  margin: 0;
+
+  accent-color: var(--accent);
+}
+
+
+/* =========================
+   TASK CONTENT
+========================= */
+
 .task-content {
   flex: 1;
+  min-width: 0;
 }
 
 .task-title {
+  font-size: 14px;
   font-weight: 500;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .task-meta {
+  display: flex;
+  align-items: center;
+
+  gap: 6px;
+
+  margin-top: 3px;
+
+  color: var(--text-muted);
+
   font-size: 12px;
-  color: #6b7280;
-  margin-top: 4px;
 }
 
 .completed {
+  color: var(--text-muted);
+
   text-decoration: line-through;
-  color: #9ca3af;
-}
-
-.delete-button {
-  background: #f3f4f6;
-  color: #374151;
-  border: none;
-  padding: 6px 9px;
-  border-radius: 6px;
-}
-
-.delete-button:hover {
-  background: #e5e7eb;
 }
 
 
@@ -186,25 +388,64 @@ textarea:focus {
 ========================= */
 
 .priority {
-  font-size: 11px;
-  padding: 4px 7px;
+  display: inline-flex;
+  align-items: center;
+
+  padding: 2px 6px;
+
   border-radius: 5px;
-  font-weight: bold;
+
+  font-size: 10px;
+  font-weight: 700;
+
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
 }
 
-.high {
-  background: #fee2e2;
-  color: #991b1b;
+.priority.high {
+  background: #fef2f2;
+  color: #b91c1c;
 }
 
-.medium {
-  background: #fef3c7;
-  color: #92400e;
+.priority.medium {
+  background: #fffbeb;
+  color: #b45309;
 }
 
-.low {
-  background: #dcfce7;
-  color: #166534;
+.priority.low {
+  background: #f0fdf4;
+  color: #15803d;
+}
+
+
+/* =========================
+   DELETE BUTTON
+========================= */
+
+.delete-button {
+  opacity: 0;
+
+  border: none;
+  border-radius: 6px;
+
+  background: transparent;
+  color: var(--text-muted);
+
+  padding: 6px 8px;
+
+  transition:
+    opacity 0.15s,
+    color 0.15s,
+    background 0.15s;
+}
+
+.task:hover .delete-button {
+  opacity: 1;
+}
+
+.delete-button:hover {
+  background: #fef2f2;
+  color: var(--danger);
 }
 
 
@@ -213,15 +454,28 @@ textarea:focus {
 ========================= */
 
 textarea {
-  width: 100%;
-  min-height: 300px;
+  display: block;
+
+  min-height: 340px;
+
   resize: vertical;
+
+  line-height: 1.6;
+
+  font-size: 14px;
 }
 
+
+/* =========================
+   SAVE STATUS
+========================= */
+
 .save-message {
-  font-size: 12px;
-  color: #6b7280;
   margin-top: 8px;
+
+  color: var(--text-muted);
+
+  font-size: 11px;
 }
 
 
@@ -230,9 +484,13 @@ textarea {
 ========================= */
 
 .empty {
-  color: #9ca3af;
+  padding: 40px 20px;
+
+  color: var(--text-muted);
+
   text-align: center;
-  padding: 30px 10px;
+
+  font-size: 14px;
 }
 
 
@@ -242,12 +500,30 @@ textarea {
 
 @media (max-width: 800px) {
 
+  header {
+    padding: 22px 0;
+  }
+
+  .container {
+    width: min(100% - 24px, 700px);
+    margin: 20px auto;
+  }
+
   .dashboard {
     grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .card {
+    padding: 18px;
   }
 
   .task-form {
     grid-template-columns: 1fr;
+  }
+
+  .delete-button {
+    opacity: 1;
   }
 
 }
